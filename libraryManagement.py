@@ -7,8 +7,12 @@ image1='LibraryHome.jpg'
 image2='library.jpg'
 image3='LibraryLogin.jpg'
 #pip install Pillow
+Books = [
+{'Bookid' : 123, 'title' : 'abc', 'author': 'abc', 'genre':'abc','copies': 12,'location':'abc'}
+]
+# Book1 = {'Bookid' : 123, 'title' : 'abc', 'author': 'abc', 'genre':'abc','copies': 12,'location':'abc'}
+# Books.append(Book1)
 class menu:
-
     def __init__(self):
         self.root=Tk()
         self.root.title('Menu')
@@ -17,7 +21,7 @@ class menu:
         # conn.execute('''create table if not exists book_info
         # (ID VARCHAR PRIMARY KEY NOT NULL,
         # TITLE VARTEXT NOT NULL,
-        # AUTHOR VARTEXT NOT NULL,
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    # AUTHOR VARTEXT NOT NULL,
         # GENRE VARTEXT NOT NULL,
         # COPIES VARINT NOT NULL,
         # LOCATION VARCHAR NOT NULL);''')
@@ -90,12 +94,20 @@ class menu:
         a=menu()
 
     def adddata(self):
-        a=self.aid.get()
-        b=self.aname.get()
-        c=self.aauthor.get()
-        d=self.agenre.get()
-        e=self.acopies.get()
-        f=self.aloc.get()
+        bookid=self.aid.get()
+        title=self.aname.get()
+        author=self.aauthor.get()
+        genre=self.agenre.get()
+        copies=self.acopies.get()
+        location=self.aloc.get()
+        if (bookid and title and author and genre  and copies and location)=="":
+            messagebox.showinfo("Error","Fields cannot be empty")
+        else:
+            Book1 = {'Bookid' : bookid, 'title' : title, 'author': author, 'genre':genre,'copies': copies,'location':location}
+            Books.append(Book1)
+            messagebox.showinfo("Inserted",Book1)
+
+
         # conn=sqlite3.connect('test.db')
         # try:
             # if (a and b and c and d  and f)=="":
