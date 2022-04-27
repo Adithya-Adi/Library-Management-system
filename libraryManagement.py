@@ -473,22 +473,24 @@ canvas=canvases(image3,w,h)
 #         conn.commit()
 USERNAME = StringVar()
 PASSWORD = StringVar()
-def Login(event=None):
-#     Database()
- 
+EMAIL = StringVar()
+CPASSWORD = StringVar()
 
+#Login verification
+def Login(event=None): 
     if USERNAME.get() == "" or PASSWORD.get() == "":
-        messagebox.showinfo("Error","Please complete the required field!")
-        lbl_text.config(text="Please complete the required field!", fg="red")
+        messagebox.showinfo("Error","Please fill the required field!")
+        lbl_text.config(text="Please fill the required field!", fg="red")
     else:
-        if USERNAME.get() == "abc" or PASSWORD.get() == "abc":
+        if USERNAME.get() == "admin" and PASSWORD.get() == "admin":
             root.destroy()
             a=menu()
         else:
             messagebox.showinfo("Error","Invalid username or password.")
-            #lbl_text.config(text="Invalid username or password", fg="red")
+            lbl_text.config(text="Invalid username or password", fg="red")
             USERNAME.set("")
             PASSWORD.set("")
+
 
 #           
 #       cursor.execute("SELECT * FROM `login` WHERE `username` = ? AND `password` = ?", (USERNAME.get(), PASSWORD.get()))
@@ -510,9 +512,73 @@ def Login(event=None):
 #     cursor.close()
 #     conn.close()
 
+#signup
+def Signup(event=None):
+     if USERNAME.get() == "" or PASSWORD.get() == "" or EMAIL.get() == "" or PASSWORD.get() == "" or CPASSWORD.get() == "":
+        messagebox.showinfo("Error","Please fill the required field!")
+     else:
+        # if USERNAME.get() == "admin" and PASSWORD.get() == "admin":
+            messagebox.showinfo("Register Successfull")
+   
+
+
+
+
+#registration form
+def Register(event=None):
+    aidd=StringVar()
+    astudentt=StringVar()
+    f1 = Frame(root, bg="white")
+    f1.place(x=300, y=85, width=700, height=550)
+    #regiter label
+    l_title = Label(f1, text="REGISTER", font=("Calibri", 30, "bold"), bg="white", fg="green").place(x=275, y=55)
+    Label(f1, text="Enter the credential", font=("Calibri", 15, "bold"), bg="white", fg="blue").place(x=272, y=100)
+    #uname
+    u_name = Label(f1, text="User Name:", font=("Calibri", 20, "bold"), bg="white", fg="black").place(x=50, y=170)
+    username = Entry(f1,textvariable=USERNAME, font=("Calibri", 15), bg="lightgray")
+    username.place(x=270, y=175, width=250)
+    #email
+    email = Label(f1, text="Email:", font=("Calibri", 20, "bold"), bg="white", fg="black").place(x=50, y=210)
+    email = Entry(f1,textvariable=EMAIL, font=("Calibri", 15), bg="lightgray")
+    email.place(x=270, y=215, width=250)
+    #password
+    u_password = Label(f1, text="Password:", font=("Calibri", 20, "bold"), bg="white", fg="black").place(x=50, y=250)
+    password = Entry(f1,textvariable=PASSWORD,show="*", font=("Calibri", 15), bg="lightgray")
+    password.place(x=270, y=255, width=250)
+    #confirm password
+    c_password = Label(f1, text="Confirm Password:", font=("Calibri", 20, "bold"), bg="white", fg="black").place(x=50, y=290)
+    cpassword = Entry(f1,textvariable=CPASSWORD,show="*", font=("Calibri", 15), bg="lightgray")
+    cpassword.place(x=270, y=295, width=250)
+    #button
+    btn_register = Button(f1, text="Sign Up", command=Signup, font=("Calibri", 20), bd=0, cursor="hand2").place(x=315, y=340)
+    #back
+    btn_login = Button(f1, text="Back", command=loginpage, font=("Calibri", 20), bd=0, cursor="hand2").place(x=330, y=400)
+
+def loginpage():
+      
+    frame1 = Frame(root, bg="white")
+    frame1.place(x=300, y=85, width=700, height=550)
+    #login label
+    l_title = Label(frame1, text="LOGIN", font=("Calibri", 30, "bold"), bg="white", fg="green").place(x=275, y=55)
+    Label(frame1, text="Enter login credentials", font=("Calibri", 15, "bold"), bg="white", fg="blue").place(x=240, y=100)
+    #username
+    u_name = Label(frame1, text="User Name:", font=("Calibri", 20, "bold"), bg="white", fg="black").place(x=50, y=170)
+    username = Entry(frame1,textvariable=USERNAME, font=("Calibri", 15), bg="lightgray")
+    username.place(x=270, y=175, width=250)
+    #password
+    u_password = Label(frame1, text="Password:", font=("Calibri", 20, "bold"), bg="white", fg="black").place(x=50, y=230)
+    password = Entry(frame1,textvariable=PASSWORD,show="*", font=("Calibri", 15), bg="lightgray")
+    password.place(x=270, y=235, width=250)
+    #validation
+    lbl_text = Label(frame1)
+    lbl_text.place(x=270,y=210)
+    lbl_text.grid_propagate(0)
+    #login button
+    btn_login = Button(frame1, text="Login", command=Login, font=("Calibri", 20), bd=0, cursor="hand2").place(x=330, y=300)
+    #register button
+    btn_register = Button(frame1, text="Register", command=Register, font=("Calibri", 20), bd=0, cursor="hand2").place(x=315, y=360)
 
 #==============================VARIABLES======================================
-           
 
 #==============================FRAMES=========================================
 '''Top = Frame(root, bd=2,  relief=RIDGE)
@@ -520,26 +586,34 @@ Top.pack(side=TOP, fill=X)
 Form = Frame(root, height=200)
 Form.pack(side=BOTTOM, pady=20)'''
 #==============================LABELS=========================================
-lbl_title = Label(canvas, text = "ADMIN   LOGIN", font=('Papyrus', 30,'bold', ),bg='black', fg='orange')
-lbl_title.place(x=500,y=100)
-lbl_username = Label(canvas, text = "Username:", font=('Papyrus', 15,'bold'),bd=4,bg='black', fg='orange')
-lbl_username.place(x=500,y=230)
-lbl_password = Label(canvas, text = "Password :", font=('Papyrus', 15,'bold'),bd=3, bg='black', fg='orange')
-lbl_password.place(x=500, y=330)
-lbl_text = Label(canvas)
-lbl_text.place(x=450,y=500)
-lbl_text.grid_propagate(0)
+# lbl_title = Label(canvas, text = "LOGIN", font=('Calibri', 30,'bold'), fg='black')
+# lbl_title.place(x=600,y=20)
+# lbl_username = Label(canvas, text = "Enter the Login Credentials", font=('Calibri', 10,'bold'),bd=4,bg='white', fg='black')
+# lbl_username.place(x=575,y=100)
+# lbl_username = Label(canvas, text = "Username:", font=('Calibri', 15,'bold'),bd=4,bg='white', fg='black')
+# lbl_username.place(x=500,y=150)
+# lbl_password = Label(canvas, text = "Password :", font=('Calibri', 15,'bold'),bd=3, bg='white', fg='black')
+# lbl_password.place(x=500, y=220)
+# lbl_text = Label(canvas)
+# lbl_text.place(x=650,y=195)
+# lbl_text.grid_propagate(0)
 
 
 
-#==============================ENTRY WIDGETS==================================
-username = Entry(canvas, textvariable=USERNAME, font=(14), bg='black', fg='orange',bd=6)
-username.place(x=650, y=230,)
-password = Entry(canvas, textvariable=PASSWORD, show="*", font=(14),bg='black', fg='orange',bd=6)
-password.place(x=650, y=330)
+# #==============================ENTRY WIDGETS==================================
+# username = Entry(canvas, textvariable=USERNAME, font=(14), bg='white', fg='black',bd=6)
+# username.place(x=650, y=150,)
+# password = Entry(canvas, textvariable=PASSWORD, show="*", font=(14),bg='white', fg='black',bd=6)
+# password.place(x=650, y=220)
 
-#==============================BUTTON WIDGETS=================================
-btn_login = Button(canvas, text="LOGIN", font=('Papyrus 15 bold'),width=25,command=Login, bg='black', fg='orange')
-btn_login.place(x=500,y=400)
-btn_login.bind('<Return>', Login)
+# #==============================BUTTON WIDGETS=================================
+# btn_login = Button(canvas, text="LOGIN", font=('Calibri 15 bold'),width=25,command=Login, bg='white', fg='black')
+# btn_login.place(x=530,y=330)
+# btn_register = Button(canvas, text="Register", font=('Calibri 15 bold'),width=25, bg='white', fg='black')
+# btn_register.place(x=530,y=390)
+
+# btn_login.bind('<Return>', Login)
+
+#frame
+loginpage()
 root.mainloop()
