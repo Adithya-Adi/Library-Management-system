@@ -10,6 +10,7 @@ image3='LibraryLogin.jpg'
 Books = [
 {'Bookid' : 123, 'title' : 'abc', 'author': 'abc', 'genre':'abc','copies': 12,'location':'abc'}
 ]
+users ={'admin' : 'admin', 'mahesha' : '1234'}
 # Book1 = {'Bookid' : 123, 'title' : 'abc', 'author': 'abc', 'genre':'abc','copies': 12,'location':'abc'}
 # Books.append(Book1)
 class menu:
@@ -473,20 +474,25 @@ canvas=canvases(image3,w,h)
 #         conn.commit()
 USERNAME = StringVar()
 PASSWORD = StringVar()
-EMAIL = StringVar()
 CPASSWORD = StringVar()
-
+# lbl_text = StringVar()
 #Login verification
 def Login(event=None): 
     if USERNAME.get() == "" or PASSWORD.get() == "":
         messagebox.showinfo("Error","Please fill the required field!")
         lbl_text.config(text="Please fill the required field!", fg="red")
     else:
-        if USERNAME.get() == "admin" and PASSWORD.get() == "admin":
-            root.destroy()
-            a=menu()
+        # if users.get(USERNAME.get()) == "admin" and PASSWORD.get() == "admin":
+        if USERNAME.get() in users and PASSWORD.get() == users[USERNAME.get()]:
+                root.destroy()  
+                a=menu()
+            # else:
+            #     messagebox.showinfo("Error","Invalid username")
+            #     lbl_text.config(text="Invalid username or password", fg="red")
+            #     USERNAME.set("")
+            #     PASSWORD.set("") 
         else:
-            messagebox.showinfo("Error","Invalid username or password.")
+            messagebox.showinfo("Error","Invalid username")
             lbl_text.config(text="Invalid username or password", fg="red")
             USERNAME.set("")
             PASSWORD.set("")
@@ -514,12 +520,28 @@ def Login(event=None):
 
 #signup
 def Signup(event=None):
-     if USERNAME.get() == "" or PASSWORD.get() == "" or EMAIL.get() == "" or PASSWORD.get() == "" or CPASSWORD.get() == "":
+     if USERNAME.get() == "" or PASSWORD.get() == "" or CPASSWORD.get() == "":
         messagebox.showinfo("Error","Please fill the required field!")
+        USERNAME.set('')
+        PASSWORD.set('')
+        CPASSWORD.set('')
+     elif USERNAME.get() in users:
+        messagebox.showinfo("Error","UserName Already exists!")
+        USERNAME.set('')
+        PASSWORD.set('')
+        CPASSWORD.set('')
+     elif PASSWORD.get() != CPASSWORD.get():
+        messagebox.showinfo("Error","Password and confirm password doesnot match")
+        USERNAME.set('')
+        PASSWORD.set('')
+        CPASSWORD.set('')
+
      else:
         # if USERNAME.get() == "admin" and PASSWORD.get() == "admin":
-            messagebox.showinfo("Register Successfull")
-   
+            users[USERNAME.get()] = PASSWORD.get()
+            messagebox.showinfo("Register Successfull",users)
+            USERNAME.set('')
+            PASSWORD.set('')
 
 
 
@@ -537,22 +559,22 @@ def Register(event=None):
     u_name = Label(f1, text="User Name:", font=("Calibri", 20, "bold"), bg="white", fg="black").place(x=50, y=170)
     username = Entry(f1,textvariable=USERNAME, font=("Calibri", 15), bg="lightgray")
     username.place(x=270, y=175, width=250)
-    #email
-    email = Label(f1, text="Email:", font=("Calibri", 20, "bold"), bg="white", fg="black").place(x=50, y=210)
-    email = Entry(f1,textvariable=EMAIL, font=("Calibri", 15), bg="lightgray")
-    email.place(x=270, y=215, width=250)
+    # #email
+    # email = Label(f1, text="Email:", font=("Calibri", 20, "bold"), bg="white", fg="black").place(x=50, y=210)
+    # email = Entry(f1,textvariable=EMAIL, font=("Calibri", 15), bg="lightgray")
+    # email.place(x=270, y=215, width=250)
     #password
-    u_password = Label(f1, text="Password:", font=("Calibri", 20, "bold"), bg="white", fg="black").place(x=50, y=250)
+    u_password = Label(f1, text="Password:", font=("Calibri", 20, "bold"), bg="white", fg="black").place(x=50, y=210)
     password = Entry(f1,textvariable=PASSWORD,show="*", font=("Calibri", 15), bg="lightgray")
-    password.place(x=270, y=255, width=250)
+    password.place(x=270, y=215, width=250)
     #confirm password
-    c_password = Label(f1, text="Confirm Password:", font=("Calibri", 20, "bold"), bg="white", fg="black").place(x=50, y=290)
+    c_password = Label(f1, text="Confirm Password:", font=("Calibri", 20, "bold"), bg="white", fg="black").place(x=50, y=250)
     cpassword = Entry(f1,textvariable=CPASSWORD,show="*", font=("Calibri", 15), bg="lightgray")
-    cpassword.place(x=270, y=295, width=250)
+    cpassword.place(x=270, y=255, width=250)
     #button
-    btn_register = Button(f1, text="Sign Up", command=Signup, font=("Calibri", 20), bd=0, cursor="hand2").place(x=315, y=340)
+    btn_register = Button(f1, text="Sign Up", command=Signup, font=("Calibri", 20), bd=0, cursor="hand2").place(x=295, y=290)
     #back
-    btn_login = Button(f1, text="Back", command=loginpage, font=("Calibri", 20), bd=0, cursor="hand2").place(x=330, y=400)
+    btn_login = Button(f1, text="Back", command=loginpage, font=("Calibri", 20), bd=0, cursor="hand2").place(x=400, y=290)
 
 def loginpage():
       
@@ -570,6 +592,7 @@ def loginpage():
     password = Entry(frame1,textvariable=PASSWORD,show="*", font=("Calibri", 15), bg="lightgray")
     password.place(x=270, y=235, width=250)
     #validation
+    global lbl_text
     lbl_text = Label(frame1)
     lbl_text.place(x=270,y=210)
     lbl_text.grid_propagate(0)
