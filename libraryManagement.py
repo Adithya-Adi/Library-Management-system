@@ -9,98 +9,31 @@ image1='LibraryHome.jpg'
 image2='library.jpg'
 image3='LibraryLogin.jpg'
 Books = [
-{'Bookid' : '123', 'title' : 'mahe', 'author': 'mahesha', 'genre':'romance','copies': 12,'location':'kokkada'}
+{'Bookid' : '123', 'title' : 'mahe', 'author': 'mahesha', 'genre':'romance','copies': 1,'location':'kokkada'}
 ]
 IssueBook = [
 {'BOOK_ID': '124', 'STUDENT_ID': '1234','ISSUE_DATE' : '2021-08-4', 'RETURN_DATE' : '2022-01-21'}
 ]
 users ={'admin' : 'admin', 'mahesha' : '1234'}
-# Book1 = {'Bookid' : 123, 'title' : 'abc', 'author': 'abc', 'genre':'abc','copies': 12,'location':'abc'}
-# Books.append(Book1)
-# A simple Python program for traversal of a linked list
-
-# Node class
-class Node:
-
-	# Function to initialise the node object
-	def __init__(self, bookid, title, author, genre, copies,location):
-		self.title = title; self.bookid = bookid; self.author = author; self.genre = genre; self.copies = copies; self.location = location; self.next = None # Initialize next as null
-
-# Linked List class contains a Node object
-class LinkedList:
-  def __init__(self):  
-    self.head = None
-
-  # insertion method for the linked list
-  def insert(self, bookid, title, author, genre, copies,location):
-    newNode = Node(bookid, title, author, genre, copies,location)
-    if(self.head):
-      current = self.head
-      while(current.next):
-        current = current.next
-      current.next = newNode
-    else:
-      self.head = newNode
-  
-  # print method for the linked list
-  def printLL(self):
-    current = self.head
-    while(current):
-    # print(current.bookid,current.title,current.author,current.genre,current.copies,current.location)
-      previous = current
-      current = current.next
-      Book1 = {'Bookid' : previous.bookid, 'title' : previous.title , 'author': previous.author, 'genre':previous.genre,'copies': previous.copies,'location':previous.location}
-      Books.append(Book1)
-    # print (previous.bookid,previous.title)
-      
-# Singly Linked List with insertion and print methods
-
-# Code execution starts here
-if __name__=='__main__':
-
-	# Start with the empty list
-    linkedlist = LinkedList()
-
 class menu:
     def __init__(self):
         self.root=Tk()
         self.root.title('Menu')
         self.root.state('zoomed')
-        # conn=sqlite3.connect('test.db')
-        # conn.execute('''create table if not exists book_info
-        # (ID VARCHAR PRIMARY KEY NOT NULL,
-        # TITLE VARTEXT NOT NULL,
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       # AUTHOR VARTEXT NOT NULL,
-        # GENRE VARTEXT NOT NULL,
-        # COPIES VARINT NOT NULL,
-        # LOCATION VARCHAR NOT NULL);''')
-        # conn.commit()
-        # conn.execute('''create table if not exists book_issued
-        # (BOOK_ID VARCHAR NOT NULL,
-        # STUDENT_ID VARCHAR NOT NULL,
-        # ISSUE_DATE DATE NOT NULL,
-        # RETURN_DATE DATE NOT NULL,
-        # PRIMARY KEY (BOOK_ID,STUDENT_ID));''')
-        # conn.commit()
-        # conn.close()
         self.a=self.canvases(image1)
         fr1 = Frame(self.a, bg="white")
         fr1.place(x=300, y=85, width=700, height=100)
         liblabel=Label(self.a, text="NMAMIT Library", font=("Calibri", 40, "bold"), bg="white", fg="green").place(x=480, y=100)
-        # liblabel=Label(self.a, text="Password:", font=("Calibri", 20, "bold"), bg="white", fg="black").place(x=50, y=230)
         l1=Button(self.a,text='BOOK DATA',font='Papyrus 22 bold',fg='black',bg='white',width=19,padx=10,borderwidth=0,command=self.book).place(x=480,y=250)
         l2=Button(self.a,text='STUDENT DATA',font='Papyrus 22 bold',fg='black',bg='white',width=19,padx=10,borderwidth=0,command=self.student).place(x=480,y=330)
-        # l3=Button(self.a,text='LOGOUT',font='Papyrus 22 bold',fg='black',bg='white',width=19,padx=10,borderwidth=0,command=loginpage).place(x=480,y=420)
         self.root.mainloop()
     def canvases(self,images):
         w = self.root.winfo_screenwidth()
         h = self.root.winfo_screenheight()
-        #photo=PhotoImage(file=images)
         photo=Image.open(images)
         photo1=photo.resize((w,h),Image.ANTIALIAS)
         photo2=ImageTk.PhotoImage(photo1)
 
-        #photo2 = ImageTk.PhotoImage(Image.open(images).resize((w, h)),Image.ANTIALIAS)
         self.canvas = Canvas(self.root, width='%d'%w, height='%d'%h)
         self.canvas.grid(row = 0, column = 0)
         self.canvas.grid_propagate(0)
@@ -160,9 +93,21 @@ class menu:
         if (bookid and title and author and genre  and copies and location)=="":
             messagebox.showinfo("Error","Fields cannot be empty")
         else:
-            linkedlist.insert(bookid, title, author, genre, copies,location)
-            linkedlist.printLL()
-            messagebox.showinfo("Inserted","Book inserted successfully")
+            i=0
+            book1 = []
+            lentt=len(Books)
+            while(i<lentt):
+                for key,values in Books[i].items():
+                    book1.append(values)
+                begin = i*6
+                end = begin+6
+                if bookid in book1[begin:end]:
+                    messagebox.showinfo("Inserted","Book ID already inserted")
+                else:
+                    Book1 = {'Bookid' : bookid, 'title' : title , 'author': author, 'genre':genre,'copies': copies,'location':location}
+                    Books.append(Book1)
+                    messagebox.showinfo("Inserted","Book inserted successfully")
+                i = i+1
 
     def search(self):
         #self.search.state('zoomed')
@@ -201,16 +146,6 @@ class menu:
                 if k in book1[begin:end]:
                     self.trees.insert('',END,values=book1[begin:end]) 
                 i = i+1
-            # conn=sqlite3.connect('test.db')
-
-            # c=conn.execute("select * from book_info where ID=? OR TITLE=? OR AUTHOR=? OR GENRE=?",(k.capitalize(),k.capitalize(),k.capitalize(),k.capitalize(),))
-            # a=c.fetchall()
-            # if len(a)!=0:
-            #     for row in a:
-
-            #         self.trees.insert("",END,values=row)
-            #     conn.commit()
-            #     conn.close()
             self.trees.bind('<<TreeviewSelect>>')
             self.variable = StringVar(self.f1)
             self.variable.set("Select Action:")
@@ -248,16 +183,9 @@ class menu:
             self.curItem = self.trees.focus()
             self.c1=self.trees.item(self.curItem,"values")[0]
             b1=Button(self.f1,text='Update',bg="blue",fg="white",font='Papyrus 10 bold',width=9,bd=3,command=self.delete2).place(x=500,y=97)
-
         except:
             messagebox.showinfo("Empty","Please select something.")
     def delete2(self):
-        # conn=sqlite3.connect('test.db')
-        # cd=conn.execute("select * from book_issued where BOOK_ID=?",(self.c1,))
-        # ab=cd.fetchall()
-        # if ab!=0:
-        #     conn.execute("DELETE FROM book_info where ID=?",(self.c1,));
-        #     conn.commit()
         i=0
         book1 = []
         lentt=len(Books)
@@ -307,14 +235,6 @@ class menu:
                     self.serch1()
                 i = i+1
 
-    #         conn=sqlite3.connect('test.db')
-
-    #         conn.execute("update book_info set COPIES=COPIES+? where ID=?",(no,self.c1,))
-    #         conn.commit()
-
-    #         messagebox.showinfo("Updated","Copies added sucessfully.")
-    #         self.serch1()
-    #         conn.close()
 
         else:
             messagebox.showinfo("Error","No. of copies cannot be negative.")
@@ -352,7 +272,7 @@ class menu:
     #     conn=sqlite3.connect('test.db')
         self.list3=("BOOK ID","TITLE","AUTHOR","GENRE","COPIES","LOCATION")
         self.treess=self.create_tree(self.f1,self.list3)
-        self.treess.place(x=25,y=50)
+        self.treess.place(x=25,y=100)
         i=0
         book1 = []
         lentt=len(Books)
@@ -363,16 +283,6 @@ class menu:
             end = begin+6
             self.treess.insert('',END,values=book1[begin:end]) 
             i = i+1
-        # for key,value in Books.items():
-        #     self.treess.insert('',END,values=key)z
-    #     c=conn.execute("select * from book_info")
-    #     g=c.fetchall()
-    #     if len(g)!=0:
-    #         for row in g:
-    #             self.treess.insert('',END,values=row)
-    #     conn.commit()
-    #     conn.close()
-        
 
     def student(self):
         self.a.destroy()
@@ -382,8 +292,6 @@ class menu:
         l2=Button(self.a,text='Return Book',font='Papyrus 22 bold', fg='black',bg='lightgray',width=15,padx=10,command=self.returnn).place(x=12,y=200)
         l3=Button(self.a,text='Student Activity',font='Papyrus 22 bold', fg='black',bg='lightgray',width=15,padx=10,command=self.activity).place(x=12,y=100)
         l4=Button(self.a,text='<< Main Menu',font='Papyrus 22 bold', fg='black',bg='lightgray',width=15,padx=10,command=self.mainmenu).place(x=12,y=600)
-
-
 
 
     def issue(self):
@@ -404,35 +312,29 @@ class menu:
         # print(date.today())
         datetoday = str(date.today())
         # print(datetoday)
-        issue1 = {'BOOK_ID': bookid, 'STUDENT_ID': studentid,'ISSUE_DATE' : datetoday, 'RETURN_DATE' : ''}
-        IssueBook.append(issue1)
-        messagebox.showinfo("Error","Inserted")
-        # conn=sqlite3.connect('test.db')
-        # cursor=conn.cursor()
-        # cursor.execute("select ID,COPIES from book_info where ID=?",(bookid.capitalize(),))
-        # an=cursor.fetchall()
-        # if (bookid and studentid!=""):
-        #     if an!=[]:
-        #         for i in an:
-        #             if i[1]>0:
-        #                 try:
-        #                     conn.execute("insert into book_issued \
-        #                     values (?,?,date('now'),date('now','+7 day'))",(bookid.capitalize(),studentid.capitalize(),));
-        #                     conn.commit()
-        #                     conn.execute("update book_info set COPIES=COPIES-1 where ID=?",(bookid.capitalize(),))
-        #                     conn.commit()
-        #                     conn.close()
-        #                     messagebox.showinfo("Updated","Book Issued sucessfully.")
-        #                 except:
-        #                     messagebox.showinfo("Error","Book is already issued by student.")
-
-        #             else:
-        #                 messagebox.showinfo("Unavailable","Book unavailable.\nThere are 0 copies of the book.")
-        #     else:
-        #         messagebox.showinfo("Error","No such Book in Database.")
-        # else:
-        #     messagebox.showinfo("Error","Fields cannot be blank.")
-
+        if (self.aidd.get() =='' or self.astudentt.get() == ""):
+            messagebox.showinfo("Error","Fields cannot be blank.")
+        else:
+            i=0
+            book1 = []
+            lentt=len(Books)
+            while(i<lentt):
+                for key,values in Books[i].items():
+                    book1.append(values)
+                begin = i*6
+                end = begin+6
+                if bookid in book1[begin:end]:
+                    Books[i]['copies'] = Books[i]['copies'] - 1
+                    if(Books[i]['copies'] < 0):
+                        messagebox.showinfo("Error","Book is already issued by student.")
+                    else:
+                        issue1 = {'BOOK_ID': bookid, 'STUDENT_ID': studentid,'ISSUE_DATE' : datetoday, 'RETURN_DATE' : ''}
+                        IssueBook.append(issue1)
+                        messagebox.showinfo("Updated","Book Issued sucessfully.")
+                else:
+                    messagebox.showinfo("Unavailable","Book unavailable.There are 0 copies of the book.")
+                i = i+1
+     
     def returnn(self):
         self.aidd=StringVar()
         self.astudentt=StringVar()
@@ -447,10 +349,12 @@ class menu:
         self.f1.grid_propagate(0)
 
     def returnbook(self):
-        a=self.aidd.get()
-        b=self.astudentt.get()
+        bookid=self.aidd.get()
+        studentid=self.astudentt.get()
         i=0
         issue = []
+        flag = 0
+        f = 0
         datetoday = str(date.today())
         lentt=len(IssueBook)
         while(i<lentt):
@@ -458,33 +362,27 @@ class menu:
                 issue.append(values)
             begin = i*4
             end = begin+4
-            if a in issue[begin:end] and b in issue[begin:end]:
+            if bookid in issue[begin:end] and studentid in issue[begin:end]:
                 IssueBook[i]['RETURN_DATE'] = datetoday
+                flag = 1
                 messagebox.showinfo("Updated","Book returned")
-                self.serch1()
+            else:
+                f=1
             i = i+1
-        # conn=sqlite3.connect('test.db')
-
-        # fg=conn.execute("select ID from book_info where ID=?",(a.capitalize(),))
-        # fh=fg.fetchall()
-        # conn.commit()
-        # if fh!=None:
-        #     c=conn.execute("select * from book_issued where BOOK_ID=? and STUDENT_ID=?",(a.capitalize(),b.capitalize(),))
-        #     d=c.fetchall()
-        #     conn.commit()
-        #     if len(d)!=0:
-        #         c.execute("DELETE FROM book_issued where BOOK_ID=? and STUDENT_ID=?",(a.capitalize(),b.capitalize(),));
-        #         conn.commit()
-        #         conn.execute("update book_info set COPIES=COPIES+1 where ID=?",(a.capitalize(),))
-        #         conn.commit()
-
-        #         messagebox.showinfo("Success","Book Returned sucessfully.")
-        #     else:
-        #         messagebox.showinfo("Error","Data not found.")
-        # else:
-        #     messagebox.showinfo("Error","No such book.\nPlease add the book in database.")
-        # conn.commit()
-        # conn.close()
+        if flag == 1:
+            i=0
+            book1 = []
+            lentt=len(Books)
+            while(i<lentt):
+                for key,values in Books[i].items():
+                    book1.append(values)
+                begin = i*6
+                end = begin+6
+                if bookid in book1[begin:end]:
+                    Books[i]['copies'] = Books[i]['copies'] + 1
+                i = i + 1
+        else:
+            messagebox.showinfo("Updated","Book returned")
 
     def activity(self):
         self.aidd=StringVar()
@@ -520,23 +418,7 @@ class menu:
             if bid in issue[begin:end]:
                 self.trees.insert('',END,values=issue[begin:end])
             i = i+1
-        # conn=sqlite3.connect('test.db')
-        # bid=self.aidd.get()
-        # #sid=self.astudentt.get()
-        # try:
-        #     c=conn.execute("select * from book_issued where BOOK_ID=? or STUDENT_ID=?",(bid.capitalize(),bid.capitalize(),))
-        #     d=c.fetchall()
-        #     if len(d)!=0:
-        #         for row in d:
-        #             self.trees.insert("",END,values=row)
-        #     else:
-        #         messagebox.showinfo("Error","Data not found.")
-        #     conn.commit()
-
-        # except Exception as e:
-        #     messagebox.showinfo(e)
-        # conn.close()
-
+       
     def searchall(self):
         self.list2=("BOOK ID","STUDENT ID","ISSUE DATE","RETURN DATE")
         self.trees=self.create_tree(self.f1,self.list2)
@@ -551,18 +433,7 @@ class menu:
             end = begin+4
             self.trees.insert('',END,values=issue[begin:end])
             i = i+1
-        # conn=sqlite3.connect('test.db')
-        # try:
-        #     c=conn.execute("select * from book_issued")
-        #     d=c.fetchall()
-        #     for row in d:
-        #         self.trees.insert("",END,values=row)
-
-        #     conn.commit()
-
-        # except Exception as e:
-        #     messagebox.showinfo(e)
-        # conn.close()
+       
 
 #===================START=======================
 def canvases(images,w,h):
@@ -570,7 +441,6 @@ def canvases(images,w,h):
     photo1=photo.resize((w,h),Image.ANTIALIAS)
     photo2=ImageTk.PhotoImage(photo1)
 
-#photo2 = ImageTk.PhotoImage(Image.open(images).resize((w, h)),Image.ANTIALIAS)
     canvas = Canvas(root, width='%d'%w, height='%d'%h)
     canvas.grid(row = 0, column = 0)
     canvas.grid_propagate(0)
@@ -586,70 +456,30 @@ screen_height = root.winfo_screenheight()
 x = (screen_width/2) - (width/2)
 y = (screen_height/2) - (height/2)"""
 
-#root.state('zoomed')
-#root.resizable(0, 0)
 w = root.winfo_screenwidth()
 h = root.winfo_screenheight()
 canvas=canvases(image3,w,h)
-#photo=PhotoImage(file=images)
 
 
-#==============================METHODS========================================
-# def Database():
-    # global conn, cursor
-#     conn = sqlite3.connect("python1.db")
-#     cursor = conn.cursor()
-#     cursor.execute("CREATE TABLE IF NOT EXISTS `login` (mem_id INTEGER NOT NULL PRIMARY KEY  AUTOINCREMENT, username TEXT, password TEXT)")
-#     cursor.execute("SELECT * FROM `login` WHERE `username` = 'admin' AND `password` = 'admin'")
-#     if cursor.fetchone() is None:
-#         cursor.execute("INSERT INTO `login` (username, password) VALUES('Prakarsha', 'root')")
-#         conn.commit()
 USERNAME = StringVar()
 PASSWORD = StringVar()
 CPASSWORD = StringVar()
-# lbl_text = StringVar()
-#Login verification
+
 def Login(event=None): 
     if USERNAME.get() == "" or PASSWORD.get() == "":
         messagebox.showinfo("Error","Please fill the required field!")
         lbl_text.config(text="Please fill the required field!", fg="red")
     else:
-        # if users.get(USERNAME.get()) == "admin" and PASSWORD.get() == "admin":
         if USERNAME.get() in users and PASSWORD.get() == users[USERNAME.get()]:
                 root.destroy()  
                 a=menu()
-            # else:
-            #     messagebox.showinfo("Error","Invalid username")
-            #     lbl_text.config(text="Invalid username or password", fg="red")
-            #     USERNAME.set("")
-            #     PASSWORD.set("") 
         else:
             messagebox.showinfo("Error","Invalid username")
             lbl_text.config(text="Invalid username or password", fg="red")
             USERNAME.set("")
             PASSWORD.set("")
 
-
-#           
-#       cursor.execute("SELECT * FROM `login` WHERE `username` = ? AND `password` = ?", (USERNAME.get(), PASSWORD.get()))
-#         if cursor.fetchone() is not None:
-#             #HomeWindow()
-#             #Top.destroy()
-#             root.destroy()
-
-#             #print("hello logged in ")
-#             a=menu()
-#             #USERNAME.set("")
-#             #PASSWORD.set("")
-#             #lbl_text.config(text="")
-#         else:
-#             messagebox.showinfo("Error","Invalid username or password.")
-#             #lbl_text.config(text="Invalid username or password", fg="red")
-#             USERNAME.set("")
-#             PASSWORD.set("")
-#     cursor.close()
-#     conn.close()
-
+  
 #signup
 def Signup(event=None):
      if USERNAME.get() == "" or PASSWORD.get() == "" or CPASSWORD.get() == "":
@@ -677,9 +507,6 @@ def Signup(event=None):
             loginpage()
 
 
-
-
-
 #registration form
 def Register(event=None):
     aidd=StringVar()
@@ -693,10 +520,6 @@ def Register(event=None):
     u_name = Label(f1, text="User Name:", font=("Calibri", 20, "bold"), bg="white", fg="black").place(x=50, y=170)
     username = Entry(f1,textvariable=USERNAME, font=("Calibri", 15), bg="lightgray")
     username.place(x=270, y=175, width=250)
-    # #email
-    # email = Label(f1, text="Email:", font=("Calibri", 20, "bold"), bg="white", fg="black").place(x=50, y=210)
-    # email = Entry(f1,textvariable=EMAIL, font=("Calibri", 15), bg="lightgray")
-    # email.place(x=270, y=215, width=250)
     #password
     u_password = Label(f1, text="Password:", font=("Calibri", 20, "bold"), bg="white", fg="black").place(x=50, y=210)
     password = Entry(f1,textvariable=PASSWORD,show="*", font=("Calibri", 15), bg="lightgray")
@@ -735,42 +558,12 @@ def loginpage():
     #register button
     btn_register = Button(frame1, text="Register", command=Register, bg="blue",fg="white", font=("Calibri", 20), bd=0, cursor="hand2").place(x=270, y=360,width=200)
 
-#==============================VARIABLES======================================
 
 #==============================FRAMES=========================================
 '''Top = Frame(root, bd=2,  relief=RIDGE)
 Top.pack(side=TOP, fill=X)
 Form = Frame(root, height=200)
 Form.pack(side=BOTTOM, pady=20)'''
-#==============================LABELS=========================================
-# lbl_title = Label(canvas, text = "LOGIN", font=('Calibri', 30,'bold'), fg='black')
-# lbl_title.place(x=600,y=20)
-# lbl_username = Label(canvas, text = "Enter the Login Credentials", font=('Calibri', 10,'bold'),bd=4,bg='white', fg='black')
-# lbl_username.place(x=575,y=100)
-# lbl_username = Label(canvas, text = "Username:", font=('Calibri', 15,'bold'),bd=4,bg='white', fg='black')
-# lbl_username.place(x=500,y=150)
-# lbl_password = Label(canvas, text = "Password :", font=('Calibri', 15,'bold'),bd=3, bg='white', fg='black')
-# lbl_password.place(x=500, y=220)
-# lbl_text = Label(canvas)
-# lbl_text.place(x=650,y=195)
-# lbl_text.grid_propagate(0)
 
-
-
-# #==============================ENTRY WIDGETS==================================
-# username = Entry(canvas, textvariable=USERNAME, font=(14), bg='white', fg='black',bd=6)
-# username.place(x=650, y=150,)
-# password = Entry(canvas, textvariable=PASSWORD, show="*", font=(14),bg='white', fg='black',bd=6)
-# password.place(x=650, y=220)
-
-# #==============================BUTTON WIDGETS=================================
-# btn_login = Button(canvas, text="LOGIN", font=('Calibri 15 bold'),width=25,command=Login, bg='white', fg='black')
-# btn_login.place(x=530,y=330)
-# btn_register = Button(canvas, text="Register", font=('Calibri 15 bold'),width=25, bg='white', fg='black')
-# btn_register.place(x=530,y=390)
-
-# btn_login.bind('<Return>', Login)
-
-#frame
 loginpage()
 root.mainloop()
