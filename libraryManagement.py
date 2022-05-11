@@ -8,13 +8,157 @@ import random
 image1='LibraryHome.jpg'
 image2='library.jpg'
 image3='LibraryLogin.jpg'
-Books = [
-{'Bookid' : '123', 'title' : 'mahe', 'author': 'mahesha', 'genre':'romance','copies': 1,'location':'kokkada'}
-]
-IssueBook = [
-{'BOOK_ID': '124', 'STUDENT_ID': '1234','ISSUE_DATE' : '2021-08-4', 'RETURN_DATE' : '2022-01-21'}
-]
-users ={'admin' : 'admin', 'mahesha' : '1234'}
+
+users ={'admin' : 'admin'}
+
+class Node:
+
+	# Function to initialise the node object
+	def __init__(self, data):
+		self.data = data; self.next = None
+
+class LinkedListBook:
+  def __init__(self):  
+    self.head = None
+
+  # insert book
+  def insert(self, data):
+    newNode = Node(data)
+    if(self.head):
+      current = self.head
+      while(current.next):
+        current = current.next
+      current.next = newNode
+    else:
+      self.head = newNode
+
+#delete book
+  def deleteNode(self, bookid):
+    if self.head is None:
+        return
+    temp = self.head
+    if bookid in temp.data:
+        self.head = temp.next
+    else:
+        while(bookid not in temp.data):
+            prevtemp = temp
+            temp = temp.next
+        prevtemp.next = temp.next
+
+#bookid already exists
+  def alreadyexists(self,bookid):
+      current = self.head
+      flag = 1
+      while(current):
+          if bookid in current.data:
+              flag = 0
+          else:
+            flag = 1
+          current = current.next
+      if flag == 1:
+        return 1
+      else:
+          return 0
+
+  # display all books
+  def printLL(self):
+    current = self.head
+    data = []
+    while(current):
+        data.append(current.data)
+        current = current.next
+    return data
+
+#display searched book
+  def printSearch(self,search):
+    current = self.head
+    data = []
+    while(current):
+        if search in current.data:
+            # print(current.data)
+            data.append(current.data)
+        current = current.next
+    return data
+
+#add and delete copies
+  def Lcopies(self,bookid,num,ch):
+    current = self.head
+    while(current):
+        if bookid in current.data:
+            if ch == 1:
+                current.data[4] = current.data[4] + num
+            elif ch == 2:
+                current.data[4] = current.data[4] - num
+        current = current.next
+
+  def avlcopies(self,bookid):
+        current = self.head
+        flag = 1
+        while(current):
+            if bookid in current.data:
+                if current.data[4] > 0:
+                    flag = 1
+                    current.data[4] = current.data[4] - 1
+                else:
+                    flag = 0
+            current = current.next
+        if flag == 1:
+            return 1
+        else:
+            return 0
+
+class LinkedListIssue:
+  def __init__(self):  
+    self.head = None
+
+  # insert book
+  def insert(self, data):
+    newNode = Node(data)
+    if(self.head):
+      current = self.head
+      while(current.next):
+        current = current.next
+      current.next = newNode
+    else:
+      self.head = newNode
+
+
+  # display all books
+  def printLL(self):
+    current = self.head
+    data = []
+    while(current):
+        data.append(current.data)
+        current = current.next
+    return data
+
+#display searched book
+  def printSearch(self,search):
+    current = self.head
+    data = []
+    while(current):
+        if search in current.data:
+            # print(current.data)
+            data.append(current.data)
+        current = current.next
+    return data
+
+  def returnbook(self,bookid,studentid,datetoday):
+    current = self.head
+    flag = 1
+    while(current):
+        if bookid in current.data and studentid in current.data:
+           current.data[3] = datetoday
+           linkedlist.Lcopies(bookid,1,1)
+           return 1
+        current = current.next
+
+if __name__=='__main__':
+
+	# Start with the empty list
+    linkedlist = LinkedListBook()
+    linkedlistissue = LinkedListIssue()
+
 class menu:
     def __init__(self):
         self.root=Tk()
@@ -93,21 +237,13 @@ class menu:
         if (bookid and title and author and genre  and copies and location)=="":
             messagebox.showinfo("Error","Fields cannot be empty")
         else:
-            i=0
-            book1 = []
-            lentt=len(Books)
-            while(i<lentt):
-                for key,values in Books[i].items():
-                    book1.append(values)
-                begin = i*6
-                end = begin+6
-                if bookid in book1[begin:end]:
-                    messagebox.showinfo("Inserted","Book ID already inserted")
-                else:
-                    Book1 = {'Bookid' : bookid, 'title' : title , 'author': author, 'genre':genre,'copies': copies,'location':location}
-                    Books.append(Book1)
-                    messagebox.showinfo("Inserted","Book inserted successfully")
-                i = i+1
+            data = [bookid, title, author, genre, copies,location]
+            if linkedlist.alreadyexists(bookid):
+                linkedlist.insert(data)
+                messagebox.showinfo("Inserted","Book inserted successfully")
+            else:
+                messagebox.showinfo("Inserted","Book ID already exists")
+
 
     def search(self):
         #self.search.state('zoomed')
@@ -135,21 +271,17 @@ class menu:
             self.list4=("BOOK ID","TITLE","AUTHOR","GENRE","COPIES","LOCATION")
             self.trees=self.create_tree(self.f1,self.list4)
             self.trees.place(x=25,y=150)
+            #search linked list
+            data = linkedlist.printSearch(k)
             i=0
-            book1 = []
-            lentt=len(Books)
-            while(i<lentt):
-                for key,values in Books[i].items():
-                    book1.append(values)
-                begin = i*6
-                end = begin+6
-                if k in book1[begin:end]:
-                    self.trees.insert('',END,values=book1[begin:end]) 
-                i = i+1
+            lent = len(data)
+            while(i<lent):
+                self.trees.insert('',END,values=data[i])
+                i = i+1 
+                
             self.trees.bind('<<TreeviewSelect>>')
             self.variable = StringVar(self.f1)
             self.variable.set("Select Action:")
-
 
             self.cm =ttk.Combobox(self.f1,textvariable=self.variable ,state='readonly',font='Papyrus 15 bold',height=50,width=15,)
             self.cm.config(values =('Add Copies', 'Delete Copies', 'Delete Book'))
@@ -160,10 +292,6 @@ class menu:
 
             self.cm.bind("<<ComboboxSelected>>",self.combo)
             self.cm.selection_clear()
-        # else:
-        #     messagebox.showinfo("Error","Data not found")
-
-
 
         else:
             messagebox.showinfo("Error","Search field cannot be empty.")
@@ -186,20 +314,8 @@ class menu:
         except:
             messagebox.showinfo("Empty","Please select something.")
     def delete2(self):
-        i=0
-        book1 = []
-        lentt=len(Books)
-        while(i<lentt):
-            for key,values in Books[i].items():
-                book1.append(values)
-            begin = i*6
-            end = begin+6
-            if self.c1 in book1[begin:end]:
-                # Books.removeAtIndex(i)
-                del Books[i]
-                messagebox.showinfo("Successful","Book Deleted sucessfully.")
-                self.trees.delete(self.curItem)
-            i = i+1
+        linkedlist.deleteNode(self.c1)
+        messagebox.showinfo("Successful","Book Deleted sucessfully.")
 
     def copies(self,varr):
         try:
@@ -219,23 +335,9 @@ class menu:
     def copiesadd(self):
         no=self.e5.get()
         if int(no)>=0:
-            i=0
-            book1 = []
-            lentt=len(Books)
-            while(i<lentt):
-                for key,values in Books[i].items():
-                    book1.append(values)
-                begin = i*6
-                end = begin+6
-                if self.c1 in book1[begin:end]:
-                    num = Books[i]['copies']
-                    copies = num + int(no)
-                    Books[i]['copies'] = copies
-                    messagebox.showinfo("Updated","Copies added sucessfully.")
-                    self.serch1()
-                i = i+1
-
-
+            data = linkedlist.Lcopies(self.c1,int(no),1)
+            messagebox.showinfo("Updated","Copies added sucessfully.")
+            self.serch1()
         else:
             messagebox.showinfo("Error","No. of copies cannot be negative.")
 
@@ -243,23 +345,9 @@ class menu:
         no1=self.e5.get()
         if int(no1)>=0:
             if int(no1)<=int(self.c2):
-                i=0
-                book1 = []
-                lentt=len(Books)
-                while(i<lentt):
-                    for key,values in Books[i].items():
-                        book1.append(values)
-                    begin = i*6
-                    end = begin+6
-                    if self.c1 in book1[begin:end]:
-                        num = Books[i]['copies']
-                        # print(type(num),type(no))
-                        copies = num - int(no1)
-                        Books[i]['copies'] = copies
-                        messagebox.showinfo("Updated","Deleted sucessfully")
-                        self.serch1()
-                    i = i+1
-
+               data = linkedlist.Lcopies(self.c1,int(no1),2)
+               messagebox.showinfo("Updated","Copies deleted sucessfully.")
+               self.serch1()
             else:
                 messagebox.showinfo("Maximum","No. of copies to delete exceed available copies.")
         else:
@@ -268,26 +356,20 @@ class menu:
     def all(self):
         self.f1=Frame(self.a,height=500,width=650,bg='lightgray')
         self.f1.place(x=500,y=100)
-        # b1=Button(self.f1,text='Back',bg='red' ,fg='white',width=10,bd=3,command=self.rm).place(x=260,y=400,width=150)
-    #     conn=sqlite3.connect('test.db')
         self.list3=("BOOK ID","TITLE","AUTHOR","GENRE","COPIES","LOCATION")
         self.treess=self.create_tree(self.f1,self.list3)
         self.treess.place(x=25,y=100)
+        data = linkedlist.printLL()
         i=0
-        book1 = []
-        lentt=len(Books)
-        while(i<lentt):
-            for key,values in Books[i].items():
-                book1.append(values)
-            begin = i*6
-            end = begin+6
-            self.treess.insert('',END,values=book1[begin:end]) 
-            i = i+1
+        lent = len(data)
+        while(i<lent):
+            self.treess.insert('',END,values=data[i])
+            i = i+1 
 
     def student(self):
         self.a.destroy()
         self.a=self.canvases(image2)
-        self.activity()
+        self.issue()
         l1=Button(self.a,text='Issue book',font='Papyrus 22 bold', fg='black',bg='lightgray',width=15,padx=10,command=self.issue).place(x=12,y=300)
         l2=Button(self.a,text='Return Book',font='Papyrus 22 bold', fg='black',bg='lightgray',width=15,padx=10,command=self.returnn).place(x=12,y=200)
         l3=Button(self.a,text='Student Activity',font='Papyrus 22 bold', fg='black',bg='lightgray',width=15,padx=10,command=self.activity).place(x=12,y=100)
@@ -315,25 +397,15 @@ class menu:
         if (self.aidd.get() =='' or self.astudentt.get() == ""):
             messagebox.showinfo("Error","Fields cannot be blank.")
         else:
-            i=0
-            book1 = []
-            lentt=len(Books)
-            while(i<lentt):
-                for key,values in Books[i].items():
-                    book1.append(values)
-                begin = i*6
-                end = begin+6
-                if bookid in book1[begin:end]:
-                    Books[i]['copies'] = Books[i]['copies'] - 1
-                    if(Books[i]['copies'] < 0):
-                        messagebox.showinfo("Error","Book is already issued by student.")
-                    else:
-                        issue1 = {'BOOK_ID': bookid, 'STUDENT_ID': studentid,'ISSUE_DATE' : datetoday, 'RETURN_DATE' : ''}
-                        IssueBook.append(issue1)
-                        messagebox.showinfo("Updated","Book Issued sucessfully.")
+            data = [bookid, studentid, datetoday, '']
+            if(linkedlist.alreadyexists(bookid) == 0):
+                if(linkedlist.avlcopies(bookid) == 1):
+                    linkedlistissue.insert(data)
+                    messagebox.showinfo("Updated","Book Issued sucessfully.")
                 else:
                     messagebox.showinfo("Unavailable","Book unavailable.There are 0 copies of the book.")
-                i = i+1
+            else:
+                messagebox.showinfo("Unavailable","Book unavailable.")
      
     def returnn(self):
         self.aidd=StringVar()
@@ -351,38 +423,13 @@ class menu:
     def returnbook(self):
         bookid=self.aidd.get()
         studentid=self.astudentt.get()
-        i=0
-        issue = []
-        flag = 0
-        f = 0
         datetoday = str(date.today())
-        lentt=len(IssueBook)
-        while(i<lentt):
-            for key,values in IssueBook[i].items():
-                issue.append(values)
-            begin = i*4
-            end = begin+4
-            if bookid in issue[begin:end] and studentid in issue[begin:end]:
-                IssueBook[i]['RETURN_DATE'] = datetoday
-                flag = 1
-                messagebox.showinfo("Updated","Book returned")
-            else:
-                f=1
-            i = i+1
-        if flag == 1:
-            i=0
-            book1 = []
-            lentt=len(Books)
-            while(i<lentt):
-                for key,values in Books[i].items():
-                    book1.append(values)
-                begin = i*6
-                end = begin+6
-                if bookid in book1[begin:end]:
-                    Books[i]['copies'] = Books[i]['copies'] + 1
-                i = i + 1
-        else:
+        if linkedlistissue.returnbook(bookid,studentid,datetoday):
             messagebox.showinfo("Updated","Book returned")
+        else:
+            messagebox.showinfo("Error","Invalid Book Id or Student ID")
+
+
 
     def activity(self):
         self.aidd=StringVar()
@@ -407,32 +454,23 @@ class menu:
         self.trees=self.create_tree(self.f1,self.list2)
         self.trees.place(x=50,y=150)
         bid=self.aidd.get()
+        data = linkedlistissue.printSearch(bid)
         i=0
-        issue = []
-        lentt=len(IssueBook)
-        while(i<lentt):
-            for key,values in IssueBook[i].items():
-                issue.append(values)
-            begin = i*4
-            end = begin+4
-            if bid in issue[begin:end]:
-                self.trees.insert('',END,values=issue[begin:end])
-            i = i+1
+        lent = len(data)
+        while(i<lent):
+            self.trees.insert('',END,values=data[i])
+            i = i+1 
        
     def searchall(self):
         self.list2=("BOOK ID","STUDENT ID","ISSUE DATE","RETURN DATE")
         self.trees=self.create_tree(self.f1,self.list2)
         self.trees.place(x=50,y=150)
+        data = linkedlistissue.printLL()
         i=0
-        issue = []
-        lentt=len(IssueBook)
-        while(i<lentt):
-            for key,values in IssueBook[i].items():
-                issue.append(values)
-            begin = i*4
-            end = begin+4
-            self.trees.insert('',END,values=issue[begin:end])
-            i = i+1
+        lent = len(data)
+        while(i<lent):
+            self.trees.insert('',END,values=data[i])
+            i = i+1 
        
 
 #===================START=======================
