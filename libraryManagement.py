@@ -9,7 +9,7 @@ image1='LibraryHome.jpg'
 image2='library.jpg'
 image3='LibraryLogin.jpg'
 
-users ={'admin' : 'admin'}
+users ={'admin' : 'admin', 'mahesh' : '1234',"1":"1"}
 
 class Node:
 
@@ -52,6 +52,7 @@ class LinkedListBook:
       while(current):
           if bookid in current.data:
               flag = 0
+              break
           else:
             flag = 1
           current = current.next
@@ -316,7 +317,7 @@ class menu:
     def delete2(self):
         linkedlist.deleteNode(self.c1)
         messagebox.showinfo("Successful","Book Deleted sucessfully.")
-
+        self.serch1()
     def copies(self,varr):
         try:
             curItem = self.trees.focus()
